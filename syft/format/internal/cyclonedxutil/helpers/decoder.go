@@ -54,13 +54,12 @@ func collectPackages(component *cyclonedx.Component, s *sbom.SBOM, idMap map[str
 	case cyclonedx.ComponentTypeContainer:
 	case cyclonedx.ComponentTypeApplication, cyclonedx.ComponentTypeFramework, cyclonedx.ComponentTypeLibrary:
 		p := decodeComponent(component)
-		idMap[component.BOMRef] = p
-		syftID := extractSyftPacakgeID(component.BOMRef)
-		if syftID != "" {
-			idMap[syftID] = p
+		if component.BOMRef != "" {
+			p.OverrideID(artifact.ID(component.BOMRef))
+		} else {
+			p.SetID()
 		}
-		// TODO there must be a better way than needing to call this manually:
-		p.SetID()
+		idMap[string(p.ID())] = p
 		s.Artifacts.Packages.Add(*p)
 	}
 
