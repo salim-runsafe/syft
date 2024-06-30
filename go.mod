@@ -1,4 +1,4 @@
-module github.com/anchore/syft
+module github.com/salim-runsafe/syft
 
 go 1.22.0
 
